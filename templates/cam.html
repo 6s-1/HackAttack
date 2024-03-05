@@ -1,162 +1,180 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anta&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <style>
-        body {
-            margin: 0;
-            max-height: 100vh;
-            overflow: hidden;
+        /* CSS styles */
+        #video {
+            width: 320px;
+            height: 240px;
+            border: 0px solid black;
+            border-radius: 5%;
+            background-size: cover;
         }
 
-        main {
-            top: 100px;
-            left: 100px;
-            height: 50%;
-            width: 50%;
+        #photo {
+            border: 1px solid black;
+            width: 320px;
+            height: 240px;
         }
-        canvas {
+
+        #canvas {
             display: none;
         }
 
-        button {
-            border: 0;
-            outline: none;
-            background: #00000070;
-            color: #FFFFFF;
-            padding: 4px 8px;
-            height: 30px;
-            min-width: 30px;
-            border-radius: 24px;
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-        }
-
-        .camera-ctn {
-            position: relative;
-            background: #000000;
-        }
-
-        .camera-view video {
-            height: 100vh;
-            width: 100vw;
-            object-fit: cover;
-            transform: scaleX(-1);
-        }
-
-        .camera-bottom {
-            height: 250px;
-            background: #00000050;
-            position: absolute;
-            inset: 0;
-            top: auto;
-            padding: 0 5%;
-            display: grid;
-            place-items: center;
-        }
-
-        .camera-bottom > .inner {
-            display: grid;
-            place-items: center;
-            max-width: 500px;
-        }
-
-        .shutter-ctn {
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
+        .camera {
             width: 100%;
-        }
-        
-        .shutter {
-            height: 80px;
-            width: 80px;
-            background: #FFBBFF;
-            border-radius: 50%;
-        }
-        
-        .shutter:active {
-            transform: scale(0.8);
+            display: block;
         }
 
-        .switch-device {
-            height: 55px;
-            width: 55px;
-            border-radius: 50%;
+        #startbutton {
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 1.0);
+            background-color: #6a67ce;
         }
+
+        #startbutton:active {
+            background-color: red;
+
+        }
+        
+        #startbutton::after {
+            background-color: red;
+
+        }
+
+        .contentarea {
+            font-size: 16px;
+            font-family: Anta, sans;
+            text-align: center;
+        }
+
+        .container {
+            height: 50%;
+            margin-top: 20px;
+            border: 3px solid black;
+            border-radius: 5%;
+        }
+
+        .btn {
+            font-family: Anta;
+        }
+
+        .btn-color-change{
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        label {
+            margin-left: 5px;
+            font-weight: 700;
+            font-family: Anta;
+        }
+
+        body {
+            background-image: url(../static/img/scanning.png);
+            font-family: Anta;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+        
     </style>
+    <title>Scan Items</title>
 </head>
 <body>
-    <main>
-        <video id="camera-stream" autoplay loop muted>
-            <source src="">
-        </video>
-    
-        <div class="shutter-ctn">
-            <button id="shutter" class="shutter"></button>
-        </div>
-    
-        <canvas id="canvas"></canvas>
-    
-        <div id="gallery-view">
-            <button id="prev">
-                PREV
-            </button>
-            <img data-index="0" src="" alt="current viewed image">
-            <button id="next">
-                NEXT
-            </button>
-        </div>
-    </main>
+<canvas id="canvas" style="display: none;"></canvas>
+<div class="contentarea">
+    <h1>Scan Your Items</h1>
+    <div class="camera">
+        <video id="video">Video stream not available.</video>
+    </div>
+    <button id="startbutton" class="btn .btn-color-change">Take photo</button>
+</div>
+<div class="d-flex justify-content-center">
+    <div class="d-flex align-items-center mt-4">
+        <label for="date" class="mr-2 ml-5">Expiration Date: </label>
+        <input type="date" id="Date" class="form-control" placeholder="Expiration Date " style="width: 200px">
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <button type="button" id="addInventoryButton" class="btn bg-success font-weight-bold ml-5">
+            Add to Inventory
+        </button>
+    </div>
+</div>
+<div class="d-flex justify-content-center mt-4">
+    <a href="{{ url_for('home') }}" class="btn bg-success font-weight-bold">Done</a>
+</div>
 
-    <script>
-        const cameraVideoStream = document.getElementById('camera-stream');
-        const shutterButton = document.getElementById('shutter');
-        const canvas = document.getElementById('canvas');
 
-        if (navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia({video: true})) {
-            navigator.mediaDevices
-            .getUserMedia({video: true})
-            .then ((stream) => {
-                cameraVideoStream.srcObject = stream;
-                cameraVideoStream.play();
+<script>
+    (function() {
+        var video = document.getElementById('video');
+        var canvas = document.getElementById('canvas');
+        var startbutton = document.getElementById('startbutton');
+        var addInventoryButton = document.getElementById('addInventoryButton'); // Reference to the new button
+        var imageDataUrl; // Global variable to store the image data URL
+
+        function startup() {
+            navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+            .then(function(stream) {
+                video.srcObject = stream;
+                video.play();
             })
+            .catch(function(err) {
+                console.log("An error occurred: " + err);
+            });
+
+            startbutton.addEventListener('click', function(ev) {
+                takepicture();
+                ev.preventDefault();
+            }, false);
         }
 
-        let width = window.innerWidth;
-        let height = 0;
-        let streaming = false
-
-        cameraVideoStream.addEventListener(
-            "canplay", (ev) => {
-                if (!streaming) {
-                    height = cameraVideoStream.videoHeight / (cameraVideoStream.videoWidth / width);
-
-                    canvas.setAttribute('width', width);
-                    canvas.setAttribute('height', height);
-                    cameraVideoStream.setAttribute("width", width);
-                    cameraVideoStream.setAttribute("height", height);
-                    streaming = true;
-
-                }
-            },
-            false
-        );
-
-        function captureImage() {
-            const canvasContext = canvas.getContext('2x');
-            canvas.width = width;
-            canvas.height = height;
-            canvasContext.drawImage(cameraVideoStream, 0, 0, width, height);
-
-            const data = canvas.toDataURL('image/png')
-            currentImageelement.src = data;
+        function takepicture() {
+            var context = canvas.getContext('2d');
+            if (video.videoWidth && video.videoHeight) {
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, video.videoWidth, video.videoHeight);
+                imageDataUrl = canvas.toDataURL('image/png'); // Store the image data URL
+            }
         }
 
-        shutterButton.addEventListener('click', () => captureImage());
-    </script>
+        addInventoryButton.addEventListener('click', function() {
+            var expiryDate = document.getElementById('Date').value; // Get the expiry date
+
+            fetch('/capture', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    image: imageDataUrl,
+                    expiryDate: expiryDate // Send the expiry date along with the image
+                }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                // Instead of redirecting, reload the cam.html page
+                location.reload(); // This line reloads the current page
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+
+        window.onload = startup;
+    })();
+    document.getElementById('startbutton').addEventListener('click', function() {
+        this.classList.toggle('btn-color-change');
+    });
+</script>
 </body>
 </html>
