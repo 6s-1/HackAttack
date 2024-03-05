@@ -43,16 +43,23 @@
   </head>
   <body>
     <div>
-      <h1 class="text-center mt-4">INVENTORY</h1>
-      <div class="vw-100 bg-white">
-        <ul>
-          {% for i in range(10): %}
-            <li> {{  i  }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="d-flex justify-content-center mt-4">
-        <a href="{{ url_for('home') }}" class="btn bg-success">Done</a>
+      <h1 class="text-center mt-4">Inventory Details</h1>
+      <div class="container mt-4">
+        {% if food_items %}
+            {% for item in food_items %}
+                <div class="card mb-2">
+                    <div class="card-body">
+                        <h5 class="card-title">Item: {{ item.name }}</h5>
+                        <p class="card-text">Expires in: {{ item.days_until_expiry }} days</p>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <p>No items in the inventory.</p>
+        {% endif %}
+    </div>
+    <div class="d-flex justify-content-center mt-4">
+        <a href="{{ url_for('home') }}" class="btn btn-success">Back to Home</a>
     </div>    
     </div>
 

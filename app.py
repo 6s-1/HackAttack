@@ -22,14 +22,14 @@ class Food_item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     expiry_date = db.Column(db.DateTime(), default=func.now())
-    # user_id = db.Column(db.Integer, foreign_key=True)
+    user_id = db.Column(db.Integer, foreign_key=True)
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     user_name = db.Column(db.String(150))
-    # food_items = db.relationship('Food_item')
+    food_items = db.relationship('Food_item')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
@@ -43,6 +43,8 @@ def create_database(app):
 
 
 create_database(app)
+
+god_user = User(email='god@godmail.com', password='ImbetterUjustsuck', user_name="notgod")
 
 rf = Roboflow(api_key="FBQSwgHbiaU0halM4Nxb")
 project = rf.workspace().project("hackattackk")
@@ -90,7 +92,11 @@ def login():
 @app.route("/viewInventory")
 def view_inventory():
     # Render the viewInventory page
-    return render_template("viewInventory.html")
+    food_items = Food_item.query.all()
+    for item in food_items:
+        delta = item.expiry_date.date() - date.today()
+        item.days_until_expiry = delta.days
+    return render_template("viewInventory.html", food_items = food_items)
 
 @app.route('/capture', methods=['POST'])
 def capture():
