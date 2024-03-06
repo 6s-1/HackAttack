@@ -31,7 +31,7 @@
     <style>
       body {
         font-family: Anta;
-        background-image: url("../static/img/homebg.png");
+        background-image: url("../static/img/homeScreenSDG.png");
         background-repeat: no-repeat;
         background-position: center;
         background-size: cover;
@@ -41,25 +41,38 @@
       h1 {
         font-weight: 600;
       }
+
+      .welcome-text{
+        font-size: 75px;
+      }
+      .btn-container{
+        width: 100%;
+      }
+
+      .scanbtn, .viewbtn {
+        width: 300px;
+      }
     </style>
   </head>
   <body>
-    <div class="wrapper vh-100 font-weight-bold">
-      <h1 class="text-center">Welcome User</h1>
-      <div class="d-flex justify-content-center mt-4">
-        <a href="{{ url_for('scanitem') }}" class="btn bg-success font-weight-bold">Scan Items</a>
-        </button>
+    <div class="vh-100 font-weight-bold mt-5">
+      <h1 class="welcome-text text-center">Welcome User</h1>
+      <div class="btn-container">
+        <div class="d-flex justify-content-center mt-4 ">
+          <a href="{{ url_for('scanitem') }}" class="btn bg-success font-weight-bold scanbtn">Scan Items</a>
+          </button>
+        </div>
+  
+        <div class="d-flex justify-content-center mt-4 ">
+          <a href="{{ url_for('view_inventory') }}" class="btn bg-success font-weight-bold viewbtn">View Inventory</a>
+        </div>
       </div>
-
-      <div class="d-flex justify-content-center mt-4">
-        <a href="{{ url_for('view_inventory') }}" class="btn bg-success font-weight-bold">View Inventory</a>
-      </div>
+      
       
       </div>
     </div>
 
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+   
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

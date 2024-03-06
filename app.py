@@ -4,12 +4,15 @@ import base64
 from PIL import Image
 import io
 import os
-from datetime import datetime
+from datetime import date, datetime
 from roboflow import Roboflow
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 dateformat = '%Y-%m-%d'
+
+
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -19,17 +22,21 @@ from flask_login import UserMixin
 from sqlalchemy.sql import func
 
 class Food_item(db.Model):
+    __tablename__ = 'food_item'
+    __table_args__ = {'extend_existing': True}  # Add this line
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150))
     expiry_date = db.Column(db.DateTime(), default=func.now())
-    user_id = db.Column(db.Integer, foreign_key=True)
+    #user_id = db.Column(db.Integer, foreign_key=True)
 
 class User(db.Model, UserMixin):
+    __tablename__ = 'user'
+    __table_args__ = {'extend_existing': True}  # Add this line
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     user_name = db.Column(db.String(150))
-    food_items = db.relationship('Food_item')
+    #food_items = db.relationship('Food_item')
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
@@ -44,7 +51,7 @@ def create_database(app):
 
 create_database(app)
 
-god_user = User(email='god@godmail.com', password='ImbetterUjustsuck', user_name="notgod")
+# god_user = User(email='god@godmail.com', password='ImbetterUjustsuck', user_name="notgod")
 
 rf = Roboflow(api_key="FBQSwgHbiaU0halM4Nxb")
 project = rf.workspace().project("hackattackk")
@@ -92,11 +99,13 @@ def login():
 @app.route("/viewInventory")
 def view_inventory():
     # Render the viewInventory page
-    food_items = Food_item.query.all()
+    food_items= Food_item.query.all()
+    #print(food_items)
     for item in food_items:
-        delta = item.expiry_date.date() - date.today()
+        delta = item.expiry_date.date() - date.today() 
         item.days_until_expiry = delta.days
-    return render_template("viewInventory.html", food_items = food_items)
+    return render_template("viewInventory.html",food_items=food_items)
+
 
 @app.route('/capture', methods=['POST'])
 def capture():
@@ -114,6 +123,7 @@ def capture():
     img=cv2.imread(filepath)
     results=model.predict(img,confidence=40,overlap=30).json()
     predictions = results['predictions']
+    print(predictions)
     if predictions:
         # For example, handling the most confident prediction
         most_confident_prediction = max(predictions, key=lambda x: x['confidence'])

@@ -39,14 +39,29 @@
         font-family: Anta;
         font-size: 45px;
       }
+      img{
+        width:70px;
+        height: 80px;
+      }
+      body > div > div{
+        display: flex; /* Align items in a row */
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally if you want */
+  gap: 10px;
+      }
     </style>
   </head>
   <body>
     <div>
+      <div>
+        <img src="../static/img/logo.png" alt="logo">
       <h1 class="text-center pt-5">Welcome to PantrySidekick</h1>
+
+      </div>
+      
       <br />
       <p class="text-center font-italic">
-        An app focused on keeping track of pantry items using visual detection along with keeping track of expiry dates
+        An app built around the 12th Sustainable Development Goal - "Ensure sustainabale consumption and production patterns" focused on <br> identifying pantry items using visual image detection along with keeping a track of the items and their expiry dates.
       </p>
       <form class="loginSignupForm mt-5" action="/login" method="post">
         <div class="form-group w-50 mx-auto">
@@ -65,11 +80,10 @@
 
       <div class="d-flex justify-content-center mt-1">
         <p class="mr-1">No account ?</p>
-        <a href="/signup ">Sign Up</a>
+        <a href="/signup ">Sign Up here!</a>
       </div>
     </div>
-    <!-- Optional JavaScript -->
-    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
       integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
