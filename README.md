@@ -2,7 +2,7 @@
 
 <table>
   <tr>
-    <td><img src="unnamed.jpg" alt="Pantry Sidekick Logo" width="800"/></td>
+    <td><img src=""C:\Users\arora\Downloads\PANTRY_SIDEKICK_LOGO.jpg" alt="Pantry Sidekick Logo" width="800"/></td>
     <td>
       <h2>Pantry Sidekick</h2>
       Welcome to Pantry Sidekick, your ultimate pantry management web application. Designed to streamline the way you manage fruits and vegetables in your home, Pantry Sidekick leverages cutting-edge technology to deliver a seamless and intuitive user experience. Our application utilizes Python, Flask, HTML, and CSS, along with the powerful YOLOv8 model from Ultralytics and a custom dataset trained using Roboflow for accurate visual recognition of your pantry items. With Pantry Sidekick, managing your pantry has never been easier and more sustainable!
